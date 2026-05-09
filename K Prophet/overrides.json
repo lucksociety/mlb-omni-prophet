@@ -1,0 +1,47 @@
+{
+    "Pitchers": {
+        "Max Fried": {
+            "PitchCounts": [95, 105],
+            "TTT_Penalty": 0.95,
+            "Comment": "Elite efficiency, model was under-projecting his ability to go deep."
+        },
+        "Michael Wacha": {
+            "Live_Telemetry": {
+                "Live_Velo_Delta": -1.5,
+                "Live_Release_SD_Drift": 6.2
+            },
+            "Score_Context": "Trailing_Big",
+            "Biomechanical_Load": {
+                "Fastball": 120,
+                "Breaking": 55
+            },
+            "Weaponization_Score": 0.85
+        },
+        "Christian Scott": {
+            "ShortLeash": true,
+            "Velo_Delta": -0.8,
+            "Comment": "Rookie with volatility, model needs to respect the early hook."
+        },
+        "Walker Buehler": {
+            "Velo_Delta": -1.2,
+            "Comment": "Recovery phase, velo is down, K-rate should be suppressed."
+        },
+        "Paul Skenes": {
+            "PitchCounts": [100, 110],
+            "Comment": "Elite arm, high leash expected in critical division matchup."
+        },
+        "Hunter Dobbins": {
+            "ShortLeash": true,
+            "Comment": "MLB Debut. High probability of early exit/hook."
+        },
+        "Cade Cavalli": {
+            "PitchCounts": [85, 95],
+            "Comment": "Under-projected ceiling, high-whiff potential."
+        }
+    },
+    "Teams": {
+        "COL": {
+            "ParkFactor": 1.15
+        }
+    }
+}

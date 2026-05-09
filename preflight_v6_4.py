@@ -1,0 +1,17 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from quant_elite_v6_4 import run_v6_4_protocol
+
+# LAA @ KCR test (from the model's own test case)
+laa_lineup = [('Neto', 'R'), ('Trout', 'R'), ('Adell', 'R'), ('Soler', 'R'), ('Peraza', 'R'), ('Schanuel', 'L'), ('Grissom', 'R'), ('O\'Hoppe', 'R'), ('Teodosio', 'R')]
+kcr_lineup = [('Garcia', 'R'), ('Witt', 'R'), ('Pasquantino', 'L'), ('Perez', 'R'), ('Jensen', 'L'), ('Massey', 'L'), ('Caglianone', 'L'), ('Collins', 'S'), ('Isbel', 'L')]
+
+print("🚀 RUNNING QUANT-ELITE V6.4 PREFLIGHT...")
+try:
+    run_v6_4_protocol('LAA', 'KCR', 'Walbert Urena', 'Cole Ragans', 'R', 'L',
+                      2.35, 6.00, laa_lineup, kcr_lineup, 101, False, 62, 9, 60, 50, 912, 0.0)
+    print("\n✅ PREFLIGHT SUCCESSFUL: V6.4 ENGINE OPERATIONAL.")
+except Exception as e:
+    print(f"\n❌ PREFLIGHT FAILED: {str(e)}")
+    sys.exit(1)

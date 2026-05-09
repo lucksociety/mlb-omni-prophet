@@ -1,0 +1,77 @@
+{
+  "Game": {
+    "Date": "2026-05-02",
+    "Matchup": "HOU @ BOS",
+    "Venue": "Fenway Park",
+    "Time": "4:10 PM ET"
+  },
+  "Pitchers": {
+    "Spencer Arrighetti (HOU)": {
+      "Hand": "R",
+      "K_pct": 18.0,
+      "BB_pct": 11.5,
+      "xERA": 5.03,
+      "Stuff": 114,
+      "VAA": -1.41,
+      "CSW_pct": 31.8,
+      "Velo_Avg": 94.1,
+      "Archetype": "North-South",
+      "Last_3_Starts_Trend": "Breakout",
+      "IP_2026": 18.0
+    },
+    "Connelly Early (BOS)": {
+      "Hand": "L",
+      "K_pct": 22.2,
+      "BB_pct": 10.7,
+      "xERA": 5.05,
+      "Stuff": 104,
+      "VAA": -1.65,
+      "CSW_pct": 28.7,
+      "Sweeper_Velo": 81.9,
+      "Archetype": "North-South",
+      "IP_2026": 31.7
+    }
+  },
+  "HOU_Lineup_vs_LHP": [
+    {"Name": "Carlos Correa", "K_pct": 16.5, "O_Swing": 31.2, "Z_Contact": 83.7},
+    {"Name": "Yordan Alvarez", "K_pct": 10.1, "O_Swing": 27.3, "Z_Contact": 92.1},
+    {"Name": "Isaac Paredes", "K_pct": 15.5, "O_Swing": 29.3, "Z_Contact": 89.2},
+    {"Name": "Christian Walker", "K_pct": 17.8, "O_Swing": 28.6, "Z_Contact": 84.5},
+    {"Name": "Jose Altuve", "K_pct": 18.0, "O_Swing": 30.3, "Z_Contact": 86.0},
+    {"Name": "Yainer Diaz", "K_pct": 14.9, "O_Swing": 41.6, "Z_Contact": 90.4},
+    {"Name": "Brice Matthews", "K_pct": 39.7, "O_Swing": 25.0, "Z_Contact": 73.3},
+    {"Name": "Cam Smith", "K_pct": 28.1, "O_Swing": 32.0, "Z_Contact": 81.4},
+    {"Name": "Dustin Harris", "K_pct": 13.0, "O_Swing": 31.5, "Z_Contact": 88.4}
+  ],
+  "BOS_Lineup_vs_RHP": [
+    {"Name": "Jarren Duran", "K_pct": 25.0, "O_Swing": 34.3, "Z_Contact": 80.3},
+    {"Name": "Willson Contreras", "K_pct": 28.8, "O_Swing": 30.4, "Z_Contact": 76.9},
+    {"Name": "Roman Anthony", "K_pct": 26.9, "O_Swing": 22.7, "Z_Contact": 83.5},
+    {"Name": "Wilyer Abreu", "K_pct": 16.9, "O_Swing": 26.7, "Z_Contact": 85.0},
+    {"Name": "Trevor Story", "K_pct": 29.6, "O_Swing": 44.8, "Z_Contact": 80.4},
+    {"Name": "Marcelo Mayer", "K_pct": 15.7, "O_Swing": 23.6, "Z_Contact": 87.9},
+    {"Name": "Ceddanne Rafaela", "K_pct": 22.2, "O_Swing": 36.3, "Z_Contact": 79.5},
+    {"Name": "Connor Wong", "K_pct": 14.0, "O_Swing": 34.9, "Z_Contact": 91.5},
+    {"Name": "Caleb Durbin", "K_pct": 14.0, "O_Swing": 24.5, "Z_Contact": 88.1}
+  ],
+  "Environment": {
+    "Umpire": "Erich Bacchus",
+    "K_Zone_Factor": "Tight",
+    "CS_pct_Estimate": 16.2,
+    "Weather": {
+      "Temp": 56,
+      "Wind": "8 mph Out (BOS)",
+      "Humidity": "Marine Layer Effect",
+      "Condition": "33% Rain Risk"
+    },
+    "ParkFactor_K": 1.02
+  },
+  "Managerial_Logic": {
+    "HOU_Joe_Espada": "Quick Hook (ShortLeash: True), Pitch Limit: 85",
+    "BOS_Chad_Tracy": "Aggressive TTT Prevention, Pitch Limit: 88"
+  },
+  "Simulation_Results": {
+    "Spencer Arrighetti": {"Mean_K": 4.75, "Exact_K": 5, "Conf": 19.5, "pK": 0.2506},
+    "Connelly Early": {"Mean_K": 3.65, "Exact_K": 3, "Conf": 22.5, "pK": 0.1842}
+  }
+}

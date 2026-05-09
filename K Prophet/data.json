@@ -1,0 +1,54 @@
+{
+  "GameInfo": {
+    "Date": "2026-04-22",
+    "AwayTeam": "Cardinals",
+    "HomeTeam": "Marlins",
+    "Ballpark": "LoanDepot Park",
+    "Moneyline_Away": "-110",
+    "Moneyline_Home": "-110"
+  },
+  "Environment": {
+    "Umpire": "MISSING",
+    "Roof": "Closed"
+  },
+  "Away": {
+    "Name": "Kyle Leahy",
+    "SwStr": 4.8,
+    "CSW": 25.7,
+    "Stuff": "MISSING",
+    "P_PA": "MISSING",
+    "K_pct": 15.1,
+    "Release_SD_X": 1.2,
+    "Release_SD_Z": 1.1,
+    "F4_Usage": 35,
+    "VAA": -4.5,
+    "Velo_Delta": 0,
+    "Spin_Delta": 0,
+    "PitchCounts": [85, 90, 88, 82, 91],
+    "DSR": 10,
+    "CareerMaxBF": 25,
+    "ShortLeash": false,
+    "RelieversUnavailable": false
+  },
+  "Home": {
+    "Name": "Janson Junk",
+    "SwStr": 9.5,
+    "CSW": 26.6,
+    "Stuff": "MISSING",
+    "P_PA": "MISSING",
+    "K_pct": 18.7,
+    "Release_SD_X": 1.4,
+    "Release_SD_Z": 1.3,
+    "F4_Usage": 30,
+    "VAA": -4.8,
+    "Velo_Delta": 0,
+    "Spin_Delta": 0,
+    "PitchCounts": [75, 80, 82, 77, 85],
+    "DSR": 12,
+    "CareerMaxBF": 26,
+    "ShortLeash": false,
+    "RelieversUnavailable": false
+  },
+  "AwayLineup": {},
+  "HomeLineup": {}
+}

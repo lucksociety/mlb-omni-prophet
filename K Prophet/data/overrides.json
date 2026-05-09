@@ -1,0 +1,468 @@
+{
+  "Pitchers": {
+    "Tomoyuki Sugano": {
+      "K_pct": 22.2,
+      "BB_pct": 6.5,
+      "Stuff": 105,
+      "DSR": 6
+    },
+    "Brandon Williamson": {
+      "K_pct": 24.9,
+      "BB_pct": 9.2,
+      "Stuff": 98,
+      "DSR": 10
+    },
+    "Bubba Chandler": {
+      "K_pct": 28.0,
+      "BB_pct": 10.5,
+      "Stuff": 115,
+      "DSR": 12,
+      "VAA": -4.2,
+      "F4_Usage": 45
+    },
+    "Andre Pallante": {
+      "K_pct": 19.8,
+      "BB_pct": 8.5,
+      "Stuff": 92,
+      "DSR": 8
+    },
+    "Cade Cavalli": {
+      "K_pct": 25.1,
+      "BB_pct": 11.2,
+      "Stuff": 104,
+      "DSR": 12,
+      "VAA": -3.9,
+      "F4_Usage": 48
+    },
+    "David Peterson": {
+      "K_pct": 23.8,
+      "BB_pct": 9.5,
+      "Stuff": 88,
+      "DSR": 7
+    },
+    "JR Ritchie": {
+      "K_pct": 22.5,
+      "BB_pct": 8.8,
+      "Stuff": 106,
+      "DSR": 10,
+      "ShortLeash": true,
+      "VAA": -4.2,
+      "F4_Usage": 35
+    },
+    "Brandon Sproat": {
+      "K_pct": 24.2,
+      "BB_pct": 10.2,
+      "Stuff": 110,
+      "DSR": 12,
+      "Volatility": true
+    },
+    "Kyle Leahy": {
+      "VAA": -4.5,
+      "Release_SD_X": 1.2,
+      "Release_SD_Z": 1.1,
+      "F4_Usage": 35,
+      "Velo_Delta": 0,
+      "Spin_Delta": 0,
+      "DSR": 10
+    },
+    "Janson Junk": {
+      "VAA": -4.8,
+      "Release_SD_X": 1.4,
+      "Release_SD_Z": 1.3,
+      "F4_Usage": 30,
+      "Velo_Delta": 0,
+      "Spin_Delta": 0,
+      "DSR": 12
+    },
+    "Shohei Ohtani": {
+      "VAA": -4.8,
+      "Release_SD_X": 1.5,
+      "Release_SD_Z": 1.4,
+      "F4_Usage": 40,
+      "Stuff": 118,
+      "K_pct": 31.0,
+      "DSR": 3
+    },
+    "Matthew Boyd": {
+      "VAA": -4.1,
+      "Release_SD_X": 1.1,
+      "Release_SD_Z": 1.0,
+      "F4_Usage": 45,
+      "DSR": 5
+    },
+    "Jacob deGrom": {
+      "VAA": -3.8,
+      "Release_SD_X": 1.0,
+      "Release_SD_Z": 1.0,
+      "F4_Usage": 50,
+      "DSR": 3,
+      "Stuff": 125,
+      "K_pct": 35.0
+    },
+    "Christian Scott": {
+      "Volatility": true
+    },
+    "Cam Schlittler": {
+      "Volatility": true
+    },
+    "Noah Schultz": {
+      "K_pct": 28.0,
+      "Stuff": 110,
+      "DSR": 8
+    },
+    "Shane McClanahan": {
+      "K_pct": 29.5,
+      "Stuff": 118,
+      "DSR": 5
+    },
+    "German Marquez": {
+      "K_pct": 22.0,
+      "Stuff": 100,
+      "DSR": 10
+    },
+    "Walbert Urena": {
+      "K_pct": 24.0,
+      "Stuff": 105,
+      "DSR": 12
+    },
+    "Cole Ragans": {
+      "K_pct": 28.5,
+      "Stuff": 115,
+      "DSR": 5
+    },
+    "Zack Wheeler": {
+      "K_pct": 27.0,
+      "Stuff": 112,
+      "DSR": 3
+    },
+    "Roki Sasaki": {
+      "K_pct": 32.0,
+      "Stuff": 125,
+      "DSR": 5
+    },
+    "Connelly Early": {
+      "K_pct": 26.5,
+      "Stuff": 95,
+      "xERA": 2.63,
+      "F4_Usage": 40,
+      "VAA": -4.2,
+      "DSR": 5
+    },
+    "Patrick Corbin": {
+      "K_pct": 20.3,
+      "Stuff": 92,
+      "xERA": 3.68,
+      "DSR": 10
+    },
+    "Keider Montero": {
+      "K_pct": 21.2,
+      "Stuff": 98,
+      "xERA": 3.68,
+      "DSR": 8
+    },
+    "S. Woods Richardson": {
+      "K_pct": 11.4,
+      "Stuff": 85,
+      "xERA": 5.96,
+      "DSR": 15
+    },
+    "Jesse Scholtens": {
+      "K_pct": 21.0,
+      "Stuff": 98,
+      "xERA": 2.93,
+      "DSR": 5
+    },
+    "Jose Quintana": {
+      "K_pct": 6.5,
+      "Stuff": 80,
+      "xERA": 6.23,
+      "DSR": 15
+    },
+    "Foster Griffin": {
+      "K_pct": 19.8,
+      "Stuff": 92,
+      "xERA": 3.38,
+      "DSR": 5
+    },
+    "Sean Burke": {
+      "K_pct": 18.3,
+      "Stuff": 96,
+      "xERA": 4.10,
+      "DSR": 10
+    },
+    "C. Mlodzinski": {
+      "K_pct": 24.1,
+      "Stuff": 105,
+      "xERA": 3.28,
+      "DSR": 5
+    },
+    "Kyle Harrison": {
+      "K_pct": 23.4,
+      "Stuff": 102,
+      "xERA": 3.06,
+      "DSR": 5
+    },
+    "Luis Gil": {
+      "K_pct": 13.8,
+      "Stuff": 92,
+      "xERA": 4.11,
+      "DSR": 12
+    },
+    "S. Arrighetti": {
+      "K_pct": 25.0,
+      "Stuff": 108,
+      "xERA": 2.45,
+      "DSR": 5
+    },
+    "J.T. Ginn": {
+      "K_pct": 19.0,
+      "Stuff": 95,
+      "xERA": 3.27,
+      "DSR": 10
+    },
+    "Kumar Rocker": {
+      "K_pct": 21.1,
+      "Stuff": 112,
+      "xERA": 3.48,
+      "DSR": 5
+    },
+    "Max Meyer": {
+      "K_pct": 25.2,
+      "Stuff": 107,
+      "xERA": 3.96,
+      "DSR": 5
+    },
+    "Landen Roupp": {
+      "K_pct": 26.7,
+      "Stuff": 118,
+      "xERA": 2.38,
+      "DSR": 5
+    },
+    "Ryne Nelson": {
+      "K_pct": 20.8,
+      "Stuff": 98,
+      "xERA": 6.97,
+      "DSR": 10
+    },
+    "Shota Imanaga": {
+      "K_pct": 37.8,
+      "Stuff": 124,
+      "xERA": 2.45,
+      "DSR": 5
+    },
+    "Justin Wrobleski": {
+      "K_pct": 9.8,
+      "Stuff": 113,
+      "xERA": 1.88,
+      "DSR": 8
+    },
+    "Chase Dollander": {
+      "K_pct": 30.8,
+      "Stuff": 115,
+      "xERA": 2.88,
+      "DSR": 5
+    },
+    "Kodai Senga": {
+      "K_pct": 23.4,
+      "Stuff": 105,
+      "xERA": 8.83,
+      "DSR": 15
+    },
+    "Reid Detmers": {
+      "K_pct": 25.8,
+      "Stuff": 106,
+      "xERA": 4.08,
+      "DSR": 5
+    },
+    "Seth Lugo": {
+      "K_pct": 24.1,
+      "Stuff": 98,
+      "xERA": 1.15,
+      "DSR": 5
+    },
+    "Steven Matz": {
+      "K_pct": 23.5,
+      "Stuff": 102,
+      "xERA": 3.42,
+      "DSR": 7
+    },
+    "Parker Messick": {
+      "K_pct": 26.9,
+      "Stuff": 106,
+      "xERA": 1.76,
+      "DSR": 4
+    },
+    "Dustin May": {
+      "K_pct": 18.9,
+      "Stuff": 115,
+      "xERA": 5.84,
+      "DSR": 12
+    },
+    "Wilber Dotel": {
+      "K_pct": 7.7,
+      "Stuff": 90,
+      "xERA": 3.38,
+      "DSR": 5
+    },
+    "Dylan Cease": {
+      "K_pct": 39.6,
+      "Stuff": 125,
+      "xERA": 2.10,
+      "DSR": 3
+    },
+    "Ranger Suarez": {
+      "K_pct": 17.4,
+      "Stuff": 95,
+      "xERA": 4.00,
+      "DSR": 5
+    },
+    "Jack Kochanowicz": {
+      "K_pct": 15.6,
+      "Stuff": 92,
+      "xERA": 3.10,
+      "DSR": 5
+    },
+    "Anthony Kay": {
+      "K_pct": 13.0,
+      "Stuff": 88,
+      "xERA": 5.57,
+      "DSR": 10
+    },
+    "Luis Castillo": {
+      "K_pct": 21.1,
+      "Stuff": 110,
+      "xERA": 5.01,
+      "DSR": 8
+    },
+    "Connor Prielipp": {
+      "K_pct": 35.3,
+      "Stuff": 115,
+      "xERA": 4.50,
+      "DSR": 10
+    },
+    "Max Fried": {
+      "K_pct": 18.1,
+      "Stuff": 105,
+      "xERA": 2.40,
+      "DSR": 3,
+      "IP": 35.0
+    },
+    "Jack Leiter": {
+      "K_pct": 25.9,
+      "Stuff": 115,
+      "xERA": 4.97,
+      "DSR": 12,
+      "IP": 29.0
+    },
+    "Matthew Boyd": {
+      "K_pct": 39.3,
+      "Stuff": 105,
+      "xERA": 5.79,
+      "DSR": 5,
+      "IP": 14.0
+    },
+    "Randy Vasquez": {
+      "K_pct": 24.0,
+      "Stuff": 102,
+      "xERA": 1.88,
+      "DSR": 3,
+      "IP": 28.2
+    },
+    "Yoshinobu Yamamoto": {
+      "K_pct": 22.1,
+      "Stuff": 112,
+      "xERA": 2.48,
+      "DSR": 3,
+      "IP": 38.0
+    },
+    "Chris Paddack": {
+      "K_pct": 22.5,
+      "Stuff": 98,
+      "xERA": 6.38,
+      "DSR": 12,
+      "IP": 25.0
+    },
+    "Drew Rasmussen": {
+      "K_pct": 25.5,
+      "BB_pct": 6.2,
+      "Stuff": 112,
+      "xERA": 3.20,
+      "DSR": 5
+    },
+    "Gavin Williams": {
+      "K_pct": 26.8,
+      "BB_pct": 7.5,
+      "Stuff": 108,
+      "xERA": 3.45,
+      "DSR": 5
+    },
+    "Elmer Rodriguez": {
+      "K_pct": 24.5,
+      "BB_pct": 9.5,
+      "Stuff": 108,
+      "ShortLeash": true,
+      "DSR": 5
+    },
+    "Brayan Bello": {
+      "K_pct": 21.8,
+      "BB_pct": 9.2,
+      "Stuff": 105,
+      "xERA": 5.10,
+      "DSR": 10,
+      "ShortLeash": true
+    },
+    "Eric Lauer": {
+      "K_pct": 17.2,
+      "BB_pct": 10.4,
+      "Stuff": 94,
+      "xERA": 5.85,
+      "DSR": 12,
+      "ShortLeash": true
+    },
+    "Jameson Taillon": {
+      "K_pct": 19.5,
+      "BB_pct": 7.2,
+      "Stuff": 92,
+      "xERA": 4.65,
+      "DSR": 5
+    },
+    "Matt Waldron": {
+      "K_pct": 16.8,
+      "BB_pct": 11.2,
+      "Stuff": 82,
+      "xERA": 6.80,
+      "DSR": 15,
+      "ShortLeash": true,
+      "Volatility": true
+    },
+    "Adrian Houser": {
+      "K_pct": 15.5,
+      "BB_pct": 8.5,
+      "Stuff": 85,
+      "DSR": 12,
+      "xERA": 5.80
+    },
+    "Trevor Richards": {
+      "K_pct": 26.8,
+      "BB_pct": 7.5,
+      "Stuff": 106,
+      "DSR": 4,
+      "xERA": 3.50,
+      "ShortLeash": true
+    },
+    "Kevin Gausman": {
+      "K_pct": 27.5,
+      "BB_pct": 4.3,
+      "Stuff": 112,
+      "DSR": 3,
+      "xERA": 2.83
+    },
+    "Bailey Ober": {
+      "K_pct": 24.1,
+      "BB_pct": 8.3,
+      "Stuff": 102,
+      "DSR": 5,
+      "xERA": 4.37
+    }
+  }
+}

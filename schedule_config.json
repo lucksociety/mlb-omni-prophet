@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Daily Cleanup (Example)",
+        "script": "calibration_check.py",
+        "type": "daily",
+        "time": "00:00"
+    },
+    {
+        "name": "Periodic Stats Check (Example)",
+        "script": "check_bullpen.py",
+        "type": "interval",
+        "minutes": 360
+    }
+]

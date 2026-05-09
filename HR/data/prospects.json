@@ -1,0 +1,17 @@
+{
+    "Angel Martinez": {"iso_prior": 0.190, "barrel_prior": 0.085, "note": "CLE elite prospect"},
+    "Carlos Cortes": {"iso_prior": 0.210, "barrel_prior": 0.095, "note": "OAK power lefty"},
+    "Dylan Beavers": {"iso_prior": 0.185, "barrel_prior": 0.080, "note": "BAL prospect"},
+    "Samuel Basallo": {"iso_prior": 0.220, "barrel_prior": 0.110, "note": "BAL top power prospect"},
+    "Konnor Griffin": {"iso_prior": 0.250, "barrel_prior": 0.120, "note": "PIT generational power"},
+    "Brooks Lee": {"iso_prior": 0.180, "barrel_prior": 0.075, "note": "MIN high pedigree"},
+    "Bradey House": {"iso_prior": 0.205, "barrel_prior": 0.090, "note": "WSH prospect"},
+    "Will Wilson": {"iso_prior": 0.175, "barrel_prior": 0.070, "note": "SEA rookie"},
+    "JJ Wetherholt": {"iso_prior": 0.195, "barrel_prior": 0.085, "note": "STL top prospect"},
+    "Pedro Pages": {"iso_prior": 0.160, "barrel_prior": 0.065, "note": "STL rookie"},
+    "Sal Stewart": {"iso_prior": 0.185, "barrel_prior": 0.080, "note": "CIN power prospect"},
+    "David Fry": {"iso_prior": 0.200, "barrel_prior": 0.090, "note": "CLE breakout"},
+    "Casey Schmidt": {"iso_prior": 0.165, "barrel_prior": 0.070, "note": "SF rookie"},
+    "Drew Gilbert": {"iso_prior": 0.190, "barrel_prior": 0.085, "note": "SF prospect"},
+    "Caleb Durbin": {"iso_prior": 0.155, "barrel_prior": 0.060, "note": "BOS rookie"}
+}
