@@ -1,0 +1,65 @@
+{
+    "Pitchers": {
+        "Adrian Houser": {
+            "K_pct": 11.4,
+            "BB_pct": 6.6,
+            "Stuff": 85,
+            "xFIP": 5.58,
+            "IP": 36.1,
+            "PitchCounts": [92, 88, 95, 90, 85],
+            "ShortLeash": true,
+            "PlanB": false,
+            "DSR": 0.25,
+            "Career_Max_BF": 24
+        },
+        "Y. Yamamoto": {
+            "K_pct": 23.5,
+            "BB_pct": 5.9,
+            "Stuff": 109,
+            "xFIP": 3.52,
+            "IP": 43.2,
+            "PitchCounts": [95, 102, 98, 90, 95],
+            "ShortLeash": false,
+            "PlanB": true,
+            "DSR": 0.10,
+            "Career_Max_BF": 27
+        },
+        "Reid Detmers": {
+            "K_pct": 25.5,
+            "BB_pct": 8.1,
+            "Stuff": 105,
+            "xFIP": 4.15,
+            "IP": 49.0,
+            "PitchCounts": [102, 91, 84, 95, 92],
+            "ShortLeash": false,
+            "PlanB": true,
+            "DSR": 0.12,
+            "Career_Max_BF": 27
+        },
+        "Parker Messick": {
+            "K_pct": 26.2,
+            "BB_pct": 7.8,
+            "Stuff": 112,
+            "xFIP": 3.40,
+            "IP": 53.2,
+            "PitchCounts": [104, 97, 92, 102, 98],
+            "ShortLeash": false,
+            "PlanB": true,
+            "DSR": 0.08,
+            "Career_Max_BF": 28,
+            "BreakoutCandidate": true
+        },
+        "Kyle Bradish": {
+            "K_pct": 28.5,
+            "BB_pct": 7.5,
+            "Stuff": 115,
+            "xFIP": 3.45,
+            "IP": 47.0,
+            "PitchCounts": [100, 96, 92, 85, 80],
+            "ShortLeash": false,
+            "PlanB": true,
+            "DSR": 0.05,
+            "Career_Max_BF": 28
+        }
+    }
+}

@@ -1,0 +1,353 @@
+import sys, os
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path: sys.path.append(ROOT_DIR)
+for folder in ['models', 'utils', 'recording', 'ingestion', 'models/K Prophet', 'models/HR']:
+    path = os.path.join(ROOT_DIR, folder)
+    if path not in sys.path: sys.path.append(path)
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path: sys.path.append(ROOT_DIR)
+for folder in ['models', 'utils', 'recording', 'ingestion', 'models/K Prophet', 'models/HR']:
+    path = os.path.join(ROOT_DIR, folder)
+    if path not in sys.path: sys.path.append(path)
+#!/usr/bin/env python3
+"""
+MLB QUANT-ELITE V6.2 — THE FAT-TAIL EXPANSION
+New: Terminal Bullpen Decay, Statcast Hard-Hit Integration, and Negative Binomial Dispersion Calibration.
+"""
+import csv, random, math, statistics
+from collections import Counter
+import datetime
+
+random.seed(2026_04_24)
+N_SIMS = 100000
+
+# ── 1. CORE DATA PARSING & PLATOON LOGIC ────────────────────────
+
+def parse_csv(filepath):
+    sections = {}
+    current_section = None
+    headers = []
+    try:
+        with open(filepath, 'r') as f:
+            for row in csv.reader(f):
+                if not row or not any(row): continue
+                fv = row[0].strip()
+                if fv in ["Batting Advanced", "Batting Stat Cast", "Pitching Advanced", 
+                          "Pitching +", "Pitching Statcast", "Batting Splits LHP", "Batting Splits RHP"]:
+                    current_section = fv; sections[fv] = []; headers = []; continue
+                if current_section:
+                    if fv == '#' and not headers:
+                        # V6.2 Fix: Use full header name or strip more carefully to avoid wRC vs wRC+ collisions
+                        headers = [h.strip() for h in row]
+                        continue
+                    if headers and fv != '#' and len(row) >= len(headers):
+                        sections[current_section].append(dict(zip(headers, row[:len(headers)])))
+    except FileNotFoundError:
+        print(f"⚠ ERROR: Could not find '{filepath}'. Ensure the FanGraphs export is in the same directory.")
+        return {}
+    return sections
+
+def fuzzy_find(name, players):
+    if not players: return None
+    name_l = name.lower()
+    last = name_l.split()[-1].lower()
+    for p in players:
+        pn = p.get('Name','').lower()
+        if name_l in pn or (last in pn and len(last) > 3): return p
+    return None
+
+def get_lineup_wrc(lineup_names, team, sections, opposing_sp_hand=None):
+    if opposing_sp_hand == 'L' and 'Batting Splits LHP' in sections:
+        batters = sections['Batting Splits LHP']
+    elif opposing_sp_hand == 'R' and 'Batting Splits RHP' in sections:
+        batters = sections['Batting Splits RHP']
+    else:
+        batters = sections.get('Batting Advanced', [])
+        
+    team_batters = [b for b in batters if b.get('Team') == team]
+    all_batters = batters
+    
+    wrc_key = 'wRC+ wRC+ - Runs per PA scaled where 100 is average; both league and park adjusted; based on wOBA'
+    
+    wrcs = []
+    for name, hand in lineup_names:
+        match = fuzzy_find(name, team_batters) or fuzzy_find(name, all_batters)
+        
+        # Fallback to Advanced if not found in splits
+        if not match and (opposing_sp_hand == 'L' or opposing_sp_hand == 'R'):
+            adv_batters = sections.get('Batting Advanced', [])
+            team_adv = [b for b in adv_batters if b.get('Team') == team]
+            match = fuzzy_find(name, team_adv) or fuzzy_find(name, adv_batters)
+
+        if match:
+            # Try various potential keys for wRC+
+            val = match.get(wrc_key) or match.get('wRC+') or '100'
+            try:
+                wrcs.append(float(val))
+            except: wrcs.append(100.0)
+        else:
+            wrcs.append(90.0) 
+    
+    return sum(wrcs) / len(wrcs) if wrcs else 100.0
+
+def get_pitcher_stats(name, team, sections):
+    pitchers = sections.get('Pitching Advanced', [])
+    team_p = [p for p in pitchers if p.get('Team') == team]
+    p = fuzzy_find(name, team_p) or fuzzy_find(name, pitchers)
+    
+    stuff_data = sections.get('Pitching +', [])
+    stuff_p = fuzzy_find(name, stuff_data)
+    
+    sc_data = sections.get('Pitching Statcast', [])
+    sc_p = fuzzy_find(name, sc_data)
+    
+    stats = {
+        'xFIP': 4.15, 'IP': 15.0, 'K/9': 8.5, 'K%': 0.22, 'Stuff+': 100.0,
+        'HardHit%': 38.0, 'Barrel%': 7.5, 'xERA': 4.15
+    }
+    
+    xfip_key = 'xFIP xFIP - Expected Fielding Independent Pitching'
+    k9_key = 'K/9 K/9 - Strikeouts per 9 innings'
+    
+    if p:
+        stats['xFIP'] = float(p.get(xfip_key) or p.get('xFIP', 4.15))
+        stats['IP'] = float(p.get('IP IP - Innings Pitched') or p.get('IP', 15.0))
+        stats['K/9'] = float(p.get(k9_key) or p.get('K/9', 8.5))
+        
+    if stuff_p:
+        stats['Stuff+'] = float(stuff_p.get('Stuff+ Stuff+ - Model based pitching metric where 100 is average') or stuff_p.get('Stuff+', 100.0))
+        
+    if sc_p:
+        hh_key = 'HardHit% HardHit% -  Percentage of batted balls with exit velocity of 95 mph or higher'
+        br_key = 'Barrel% Barrel% - Percentage of batted balls that are classified as barrels'
+        xera_key = 'xERA xERA - Expected ERA'
+        
+        try: stats['HardHit%'] = float((sc_p.get(hh_key) or sc_p.get('HardHit%', '38%')).strip('%'))
+        except: pass
+        try: stats['Barrel%'] = float((sc_p.get(br_key) or sc_p.get('Barrel%', '7.5%')).strip('%'))
+        except: pass
+        try: stats['xERA'] = float(sc_p.get(xera_key) or sc_p.get('xERA', 4.15))
+        except: pass
+        
+    return stats
+
+# ── 2. DYNAMIC PITCHING & BULLPEN STATE ─────────────────────────
+
+def get_bullpen_tiers(team, sp_name, sections):
+    pitchers = [p for p in sections.get('Pitching Advanced', [])
+                if p.get('Team') == team and p.get('Name','') != sp_name]
+    
+    xfips = []
+    for p in pitchers:
+        val = None
+        # Try finding a key that contains 'xFIP' but is NOT 'xFIP-'
+        for k, v in p.items():
+            if 'xFIP' in k and 'xFIP-' not in k:
+                try:
+                    val = float(v)
+                    break
+                except: continue
+        if val is not None:
+            xfips.append(val)
+        else:
+            xfips.append(4.15) # Default fallback
+        
+    if not xfips:
+        return {'A': 3.50, 'B': 5.00, 'C': 9.00, 'AVG': 4.15}
+        
+    xfips.sort()
+    a_team = xfips[:2] if len(xfips) >= 2 else xfips
+    b_team = xfips[-3:] if len(xfips) >= 3 else xfips
+    c_team = xfips[-1:] if len(xfips) >= 1 else xfips
+    
+    return {
+        'A': sum(a_team)/len(a_team),
+        'B': sum(b_team)/len(b_team),
+        'C': (sum(c_team)/len(c_team)) * 2.25,
+        'AVG': sum(xfips)/len(xfips)
+    }
+
+def bayesian_era_v6_2(stats, era_26):
+    xfip = stats['xFIP']
+    ip = stats['IP']
+    xera = stats['xERA']
+    hh_pct = stats['HardHit%']
+    barrel_pct = stats['Barrel%']
+    
+    w26 = min(0.45, ip / 50.0)
+    sc_mod = 1.0
+    if hh_pct > 42.0: sc_mod += (hh_pct - 42.0) * 0.015
+    if barrel_pct > 10.0: sc_mod += (barrel_pct - 10.0) * 0.02
+    
+    base_blended = (1-w26)*xfip + w26*era_26
+    final_era = (base_blended * 0.7 + xera * 0.3) * sc_mod
+    
+    return max(1.50, min(final_era, 9.50))
+
+def calc_expected_ip(blended_era, opp_wrc, base_ip=5.5):
+    era_penalty = (blended_era - 4.0) * 0.5
+    wrc_penalty = (opp_wrc - 100.0) * 0.02
+    ip = base_ip - era_penalty - wrc_penalty
+    return max(2.5, min(ip, 7.0))
+
+# ── 3. MATH DISTRIBUTION GENERATORS ─────────────────────────────
+
+def poisson_rvs(lam):
+    if lam <= 0: return 0
+    if lam > 500: return max(0, int(random.gauss(lam, math.sqrt(lam))))
+    L = math.exp(-lam); k=0; p=1.0
+    while p > L: k+=1; p*=random.random()
+    return k-1
+
+def nbinom_rvs(n, mu):
+    if mu <= 0: return 0
+    p = n / (n + mu)
+    return poisson_rvs(random.gammavariate(n, (1.0-p)/p))
+
+# ── 4. STATE ENGINE SIMULATOR ───────────────────────────────────
+
+def simulate_game_v6_2(away_sp_stats, home_sp_stats, away_bp, home_bp, 
+                       away_wrc, home_wrc, env_factor, rain_intensity=0, runs_to_blowout=4):
+    
+    away_sp_stuff_mod = 1.0 - ((away_sp_stats['Stuff+'] - 100) * 0.005)
+    home_sp_stuff_mod = 1.0 - ((home_sp_stats['Stuff+'] - 100) * 0.005)
+    rain_grip_penalty = 1.0 + (rain_intensity * 0.15)
+    
+    away_sp_mu = (away_sp_stats['Blended'] / 9.0) * away_sp_stats['Exp_IP'] * (home_wrc/100.0) * away_sp_stuff_mod * env_factor * rain_grip_penalty
+    home_sp_mu = (home_sp_stats['Blended'] / 9.0) * home_sp_stats['Exp_IP'] * (away_wrc/100.0) * home_sp_stuff_mod * env_factor * rain_grip_penalty
+
+    away_total_runs = []; home_total_runs = []; away_sp_k_dist = []; home_sp_k_dist = []
+    sp_k = 3.5 
+    if rain_intensity > 0.4: sp_k = 2.5
+
+    for _ in range(N_SIMS):
+        # Away Batting
+        h_sp_runs = nbinom_rvs(sp_k, home_sp_mu)
+        actual_h_ip = home_sp_stats['Exp_IP']
+        if random.random() < 0.02:
+            actual_h_ip = random.uniform(0.1, 2.0); h_sp_runs += poisson_rvs(2.0)
+        
+        bp_innings = 9.0 - actual_h_ip
+        if h_sp_runs >= runs_to_blowout or actual_h_ip < 4.0:
+            tm = 1.25 if actual_h_ip < 4.0 else 1.0
+            h_bp_mu = (home_bp['C'] / 9.0) * bp_innings * (away_wrc/100.0) * env_factor * rain_grip_penalty * tm
+        elif actual_h_ip < home_sp_stats['Exp_IP']:
+            h_bp_mu = (home_bp['B'] / 9.0) * bp_innings * (away_wrc/100.0) * env_factor * rain_grip_penalty
+        else:
+            h_bp_mu = (home_bp['A'] / 9.0) * bp_innings * (away_wrc/100.0) * env_factor * rain_grip_penalty
+        a_runs = h_sp_runs + poisson_rvs(h_bp_mu)
+        
+        # Home Batting
+        a_sp_runs = nbinom_rvs(sp_k, away_sp_mu)
+        actual_a_ip = away_sp_stats['Exp_IP']
+        if random.random() < 0.02:
+            actual_a_ip = random.uniform(0.1, 2.0); a_sp_runs += poisson_rvs(2.0)
+            
+        bp_innings = 9.0 - actual_a_ip
+        if a_sp_runs >= runs_to_blowout or actual_a_ip < 4.0:
+            tm = 1.25 if actual_a_ip < 4.0 else 1.0
+            a_bp_mu = (away_bp['C'] / 9.0) * bp_innings * (home_wrc/100.0) * env_factor * rain_grip_penalty * tm
+        elif actual_a_ip < away_sp_stats['Exp_IP']:
+            a_bp_mu = (away_bp['B'] / 9.0) * bp_innings * (home_wrc/100.0) * env_factor * rain_grip_penalty
+        else:
+            a_bp_mu = (away_bp['A'] / 9.0) * bp_innings * (home_wrc/100.0) * env_factor * rain_grip_penalty
+        h_runs = a_sp_runs + poisson_rvs(a_bp_mu * 1.03)
+
+        away_total_runs.append(a_runs); home_total_runs.append(h_runs)
+        
+        # Non-Linear Fatigue K-Decay
+        raw_a_k_mu = (away_sp_stats['K/9']/9.0)*actual_a_ip
+        if raw_a_k_mu > 6.5:
+            raw_a_k_mu = 6.5 + math.log1p(raw_a_k_mu - 6.5) * 1.2
+        away_sp_k_dist.append(poisson_rvs(raw_a_k_mu))
+        
+        raw_h_k_mu = (home_sp_stats['K/9']/9.0)*actual_h_ip
+        if raw_h_k_mu > 6.5:
+            raw_h_k_mu = 6.5 + math.log1p(raw_h_k_mu - 6.5) * 1.2
+        home_sp_k_dist.append(poisson_rvs(raw_h_k_mu))
+        
+    return away_total_runs, home_total_runs, away_sp_k_dist, home_sp_k_dist
+
+def run_v6_2_protocol(away_team, home_team, away_sp_name, home_sp_name,
+                      away_sp_hand, home_sp_hand, away_era, home_era,
+                      away_lineup, home_lineup, park_factor, is_dome, temp_f, wind_mph, wind_ang=90, 
+                      humidity=50, altitude=0, rain_intensity=0):
+    
+    sections = parse_csv('MLB Stats')
+    away_sp_stats = get_pitcher_stats(away_sp_name, away_team, sections)
+    home_sp_stats = get_pitcher_stats(home_sp_name, home_team, sections)
+    
+    away_sp_stats['Blended'] = bayesian_era_v6_2(away_sp_stats, away_era)
+    home_sp_stats['Blended'] = bayesian_era_v6_2(home_sp_stats, home_era)
+    
+    away_wrc = get_lineup_wrc(away_lineup, away_team, sections, home_sp_hand)
+    home_wrc = get_lineup_wrc(home_lineup, home_team, sections, away_sp_hand)
+    
+    away_sp_stats['Exp_IP'] = calc_expected_ip(away_sp_stats['Blended'], home_wrc)
+    home_sp_stats['Exp_IP'] = calc_expected_ip(home_sp_stats['Blended'], away_wrc)
+    
+    away_bp = get_bullpen_tiers(away_team, away_sp_name, sections)
+    home_bp = get_bullpen_tiers(home_team, home_sp_name, sections)
+    
+    pf = park_factor / 100.0
+    t_adj = 1.0 if is_dome else 1.0 + ((temp_f - 72) * 0.0008)
+    eff_wind = 0 if is_dome else wind_mph * math.cos(math.radians(wind_ang))
+    h_adj = 1.0 + ((humidity - 50) * 0.0004)
+    alt_adj = 1.0 + (altitude / 1000.0 * 0.01)
+    
+    if is_dome: w_adj = 1.0
+    else:
+        if eff_wind > 10: w_adj = 1.0 + (10*0.004) + (math.exp((eff_wind-10)*0.15)-1.0)*0.02
+        elif eff_wind < -10: w_adj = 1.0 + (-10*0.004) - (math.exp((abs(eff_wind)-10)*0.15)-1.0)*0.02
+        else: w_adj = 1.0 + (eff_wind*0.004)
+            
+    env_factor = pf * t_adj * w_adj * h_adj * alt_adj * (1.0 - rain_intensity*0.035)
+    
+    ar, hr, a_k, h_k = simulate_game_v6_2(away_sp_stats, home_sp_stats, away_bp, home_bp, 
+                                          away_wrc, home_wrc, env_factor, rain_intensity)
+                                         
+    n = len(ar)
+    tr = [ar[i]+hr[i] for i in range(n)]
+    aw = sum(1 for i in range(n) if ar[i]>hr[i]); hw = sum(1 for i in range(n) if hr[i]>ar[i]); ties = n-aw-hw
+    apct = (aw + ties*0.48)/n*100; hpct = (hw + ties*0.52)/n*100
+    away_mu = sum(ar)/n; home_mu = sum(hr)/n; total_mu = sum(tr)/n
+    ak_mean = sum(a_k)/n; hk_mean = sum(h_k)/n
+    ak_med = statistics.median(a_k); hk_med = statistics.median(h_k)
+    blowout_prob = sum(1 for r in tr if r > 13) / n * 100
+    run_diff = abs(away_mu - home_mu)
+
+    print(f"╔══════════════════════════════════════════════════════════════════╗")
+    print(f"║        MLB QUANT-ELITE V6.3 | THE FAT-TAIL EXPANSION          ║")
+    print(f"║        {away_team} @ {home_team} | DETERMINISTIC STATE ENGINE         ║")
+    print(f"╚══════════════════════════════════════════════════════════════════╝\n")
+    print(f"── 1. STATE ENGINE EXPECTANCY ({N_SIMS:,} SIMS) ───────────────────")
+    print(f"  {away_team}: {away_mu:.3f} runs  |  {home_team}: {home_mu:.3f} runs")
+    print(f"  TOTAL: {total_mu:.3f} runs")
+    print(f"  WIN PROBABILITY: {away_team} {apct:.1f}% | {home_team} {hpct:.1f}%")
+    print(f"  BLOWOUT PROBABILITY (>13 RUNS): {blowout_prob:.1f}%")
+    
+    print(f"\n── 2. PITCHER PROP PROJECTIONS ────────────────────────────────────")
+    print(f"  {away_sp_name} - {ak_mean:.2f} K's - Final Prediction: {int(ak_med)} K's")
+    print(f"  {home_sp_name} - {hk_mean:.2f} K's - Final Prediction: {int(hk_med)} K's")
+    
+    print(f"\n── 3. BETTING INTELLIGENCE FLAGS ──────────────────────────────────")
+    if run_diff < 2.0:
+        print(f"  [WARNING] Run Diff {run_diff:.2f} < 2.0. HIGH VARIANCE: FADE MONEYLINE.")
+        print(f"  [ACTION] Focus on Game Totals or Pitcher Unders.")
+    else:
+        fav = away_team if away_mu > home_mu else home_team
+        print(f"  [EDGE DETECTED] Run Diff {run_diff:.2f} >= 2.0. CONSIDER RUNLINE (-1.5) FOR {fav}.")
+
+    print(f"\n==================================================================")
+    print(f"  V6.3 FINAL: {away_team} {away_mu:.2f} — {home_team} {home_mu:.2f}")
+    print(f"==================================================================")
+    
+    return ar, hr, a_k, h_k
+
+if __name__ == '__main__':
+    # Test LAA @ KC failure state
+    laa_lineup = [('Neto', 'R'), ('Trout', 'R'), ('Adell', 'R'), ('Soler', 'R'), ('Peraza', 'R'), ('Schanuel', 'L'), ('Grissom', 'R'), ('O\'Hoppe', 'R'), ('Teodosio', 'R')]
+    kcr_lineup = [('Garcia', 'R'), ('Witt', 'R'), ('Pasquantino', 'L'), ('Perez', 'R'), ('Jensen', 'L'), ('Massey', 'L'), ('Caglianone', 'L'), ('Collins', 'S'), ('Isbel', 'L')]
+    run_v6_2_protocol('LAA', 'KCR', 'Walbert Urena', 'Cole Ragans', 'R', 'L',
+                      2.35, 6.00, laa_lineup, kcr_lineup, 101, False, 62, 9, 60, 50, 912, 0.0)

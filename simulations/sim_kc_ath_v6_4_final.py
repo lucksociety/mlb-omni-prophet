@@ -1,0 +1,95 @@
+import sys, os
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path: sys.path.append(ROOT_DIR)
+for folder in ['models', 'utils', 'recording', 'ingestion', 'models/K Prophet', 'models/HR']:
+    path = os.path.join(ROOT_DIR, folder)
+    if path not in sys.path: sys.path.append(path)
+
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if ROOT_DIR not in sys.path: sys.path.append(ROOT_DIR)
+for folder in ['models', 'utils', 'recording', 'ingestion', 'models/K Prophet', 'models/HR']:
+    path = os.path.join(ROOT_DIR, folder)
+    if path not in sys.path: sys.path.append(path)
+
+import os
+
+from quant_elite_v6_4 import run_v6_4_protocol
+
+def run_sim():
+    # FINAL KC Lineup from new image
+    kc_lineup = [
+        ('M. Garcia', 'R'),
+        ('Bobby Witt', 'R'),
+        ('Lane Thomas', 'R'),
+        ('S. Perez', 'R'),
+        ('Nick Loftin', 'R'),
+        ('S. Marte', 'R'),
+        ('C. Jensen', 'L'),
+        ('I. Collins', 'S'),
+        ('Elias Diaz', 'R')
+    ]
+    
+    # FINAL ATH Lineup from new image
+    ath_lineup = [
+        ('Jacob Wilson', 'R'),
+        ('S. Langeliers', 'R'),
+        ('Nick Kurtz', 'L'),
+        ('Colby Thomas', 'R'),
+        ('D. Hernaiz', 'R'),
+        ('C. Cortes', 'L'),
+        ('Austin Wynns', 'R'),
+        ('Zack Gelof', 'R'),
+        ('L. Butler', 'L')
+    ]
+    
+    # KC @ ATH | 3:05 PM ET
+    # KC SP: Noah Cameron (L), 5.13 ERA
+    # ATH SP: Jeffrey Springs (L), 3.79 ERA
+    
+    print("\n🚀 EXECUTING FINAL QUANT-ELITE V6.4: KC @ ATH...")
+    
+    ar, hr, a_k, h_k = run_v6_4_protocol(
+        away_team='KC',
+        home_team='ATH',
+        away_sp_name='Noah Cameron',
+        home_sp_name='Jeffrey Springs',
+        away_sp_hand='L',
+        home_sp_hand='L',
+        away_era=5.13,
+        home_era=3.79,
+        away_lineup=kc_lineup,
+        home_lineup=ath_lineup,
+        park_factor=96, 
+        is_dome=False,
+        temp_f=65,
+        wind_mph=10,
+        wind_ang=90,
+        humidity=50,
+        altitude=0,
+        rain_intensity=0.0,
+        away_drs=1, 
+        home_drs=1, 
+        away_manager_hook=0.0,
+        home_manager_hook=0.0,
+        away_bp_pitches_d1=0,
+        away_bp_pitches_d2=0,
+        home_bp_pitches_d1=0,
+        home_bp_pitches_d2=0,
+        umpire_zone='neutral',
+        away_catcher='Elias Diaz',
+        home_catcher='S. Langeliers',
+        game_time='15:05'
+    )
+
+    def print_k_table(name, dist):
+        import statistics
+        print(f"\nSTRIKEOUT O/U PROBABILITIES: {name}")
+        for line in [3.5, 4.5, 5.5, 6.5, 7.5]:
+            over = sum(1 for k in dist if k > line) / len(dist) * 100
+            print(f"  Line {line:3.1f}: Over {over:5.1f}% | Under {100-over:5.1f}%")
+
+    print_k_table('Noah Cameron (KC)', a_k)
+    print_k_table('Jeffrey Springs (ATH)', h_k)
+
+if __name__ == '__main__':
+    run_sim()
